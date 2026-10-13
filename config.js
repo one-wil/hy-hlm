@@ -536,7 +536,7 @@ const STORE_CONFIG = {
     ]
   },
   "STORE_INFO": {
-    "name": "Meghili-shop",
+    "name": "Hy-Hlm",
     "storeIcon": "-",
     "storeTitle": "-",
     "tagline": "متجر الجودة المفقودة ",
