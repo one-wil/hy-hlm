@@ -2446,7 +2446,11 @@
          .subscription-payment-details{display:grid;gap:12px;margin-top:18px;padding:16px;border:1px solid rgba(67,97,238,.18);border-radius:16px;background:linear-gradient(135deg,#f8faff,#eef8ff);direction:rtl}
 .payment-manager-row,.payment-rip-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 14px;background:#fff;border:1px solid #e4eaf5;border-radius:12px}
 .payment-manager-row>span,.payment-rip-row>span{color:#4b587c;font-weight:700;display:flex;align-items:center;gap:7px}
-.payment-manager-row strong{margin-right:auto;color:#18234a;font-size:16px}\n.payment-manager-row .subscription-owner-prefix{color:#53658c;font-weight:700;display:inline-flex;align-items:center}
+.payment-manager-row strong{margin-right:auto;color:#18234a;font-size:16px}\n.payment-manager-row .subscription-owner-prefix{color:#53658c;font-weight:700;font-size:13px;display:inline-flex;align-items:center}
+.subscription-payment-intro{font-size:15px;font-weight:900;color:#243b75;text-align:right;direction:rtl;padding:0 4px 2px}
+.subscription-payment-instruction{font-size:14px;font-weight:800;color:#4361ee;text-align:right;direction:rtl;padding:2px 4px}
+.payment-rip-row .rip-recipient-label{display:flex;flex-direction:column;align-items:flex-start;gap:0;line-height:1.25}
+.payment-rip-row .rip-recipient-label small{font-size:11px;color:#7b87a5;font-weight:700}
 .payment-rip-row strong{margin-right:auto;color:#172554;font-size:16px;letter-spacing:.5px}
 .payment-rip-row .rip-account-holder{flex:0 0 100%;width:100%;order:10;margin-top:5px;padding:10px 12px;border-radius:9px;background:linear-gradient(90deg,#eef4ff,#f7faff);border:1px solid #dce7ff;color:#243b75;font-size:14px;font-weight:800;letter-spacing:.15px;text-align:left;direction:ltr}
 .payment-rip-row .rip-account-holder i{color:#4361ee;margin-right:6px}
@@ -3903,19 +3907,21 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                                 <div class="subscription-price-card" data-plan="12m"><span>12 شهرًا</span><strong>9000 دج</strong></div>
                             </div>
                             <div class="subscription-payment-details" aria-label="بيانات المدير وطرق الدفع">
+                                <div class="subscription-payment-intro">مطلوب من السيد:</div>
                                 <div class="payment-manager-row" aria-label="مدير العلامة التجارية وصاحب المتجر">
                                     <span><i class="fas fa-store"></i> مدير العلامة التجارية</span>
                                     <strong id="subscriptionBrandName">العلامة التجارية</strong>
-                                    <span class="subscription-owner-prefix">السيد</span>
+                                    <span class="subscription-owner-prefix">السيد(ة)</span>
                                     <strong id="subscriptionManagerName">مدير المتجر</strong>
                                     <button type="button" class="copy-payment-btn" onclick="copySubscriptionValue('subscriptionManagerName',this)" aria-label="نسخ اسم ولقب مدير المتجر" title="نسخ اسم مدير المتجر"><i class="fas fa-copy"></i></button>
                                 </div>
+                                <div class="subscription-payment-instruction">تفعيل العرض قبل انقضاء المدة وذلك بالدفع عبر:</div>
                                 <div class="payment-methods-row">
                                     <span class="payment-method-chip"><i class="fas fa-check-circle"></i> BaridiMob <b>مفعّل</b></span>
                                     <span class="payment-method-chip"><i class="fas fa-check-circle"></i> CCP <b>مفعّل</b></span>
                                 </div>
                                 <div class="payment-rip-row">
-                                    <span><i class="fas fa-university"></i> رقم RIP</span>
+                                    <span class="rip-recipient-label"><i class="fas fa-university"></i><span>إلى :</span><small>رقم RIP</small></span>
                                     <strong id="subscriptionRIP" dir="ltr">00799999000648007251</strong>
                                     <button type="button" class="copy-payment-btn" onclick="copySubscriptionValue('subscriptionRIP',this)" aria-label="نسخ رقم RIP" title="نسخ رقم RIP"><i class="fas fa-copy"></i></button>
                                     <div class="rip-account-holder" dir="ltr"><i class="fas fa-id-card"></i> BENAKRAB Ahcene <span>(manager StoreMaster team)</span></div>
