@@ -2632,7 +2632,20 @@
         .subscription-contact-option:hover { transform:translateY(-3px); background:rgba(255,255,255,.14); }
         @media (max-width:700px) { .about-support-numbers .about-contact-person { width:100%; } .subscription-contact-footer { padding:22px 14px; } .subscription-contact-option { width:100%; min-width:0; } }
         .about-subscription-contact { max-width: 900px; margin: 30px auto 20px; }
-        </style>
+        
+/* وضوح النسخ ومعلومات المرسل في قسم الاشتراك */
+.payment-manager-row>span:first-child{color:#000!important;text-shadow:none!important}
+.copy-payment-btn{width:42px;height:42px;flex:0 0 42px;background:linear-gradient(135deg,#2455d6,#12379c);border:2px solid #fff;outline:1px solid rgba(36,85,214,.28);box-shadow:0 4px 12px rgba(20,55,156,.28);font-size:18px}
+.copy-payment-btn:hover{transform:translateY(-2px);box-shadow:0 7px 17px rgba(20,55,156,.36)}
+.copy-payment-btn.copied{background:linear-gradient(135deg,#159957,#087443)!important;outline-color:#159957;animation:copySuccessPop .35s ease}
+@keyframes copySuccessPop{0%{transform:scale(.86)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+.sender-copy-note{margin:14px 0 10px;padding:11px 14px;border-radius:10px;background:#fff8e7;border:1px solid #f3d28a;color:#493300;font-weight:800;text-align:right;direction:rtl;line-height:1.8}
+.sender-copy-block{margin:8px 0 16px;padding:12px 14px;border:1px solid #dce5f4;border-radius:12px;background:#fff;text-align:right}
+.sender-copy-caption{font-size:13px;color:#586174;font-weight:800;margin-bottom:7px}
+.sender-copy-row{display:flex;align-items:center;justify-content:flex-start;gap:12px}
+.sender-copy-row strong{font-size:17px;font-weight:900;color:#000!important;text-shadow:none!important}
+.sender-copy-btn{margin-inline-start:0}
+</style>
 
 <style id="mobile-full-height-modals">
 @media (max-width: 768px) {
@@ -3953,6 +3966,14 @@ input:focus, textarea:focus, select:focus, [contenteditable="true"]:focus, [cont
                     <div class="subscription-contact-footer">
                         <h3><i class="fas fa-headset"></i> التواصل مع الدعم</h3>
                         <p>اختر وسيلة الدفع واختر وسيلة التواصل لإثبات الدفع (PDF، لقطة شاشة، وصل CCP أو أي إثبات واضح للتحويل).</p>
+                        <div class="sender-copy-note">يجب نسخ معلوماتك أدناه عند إرسال إثبات الدفع.</div>
+                        <div class="sender-copy-block" dir="rtl">
+                            <div class="sender-copy-caption">المرسل</div>
+                            <div class="sender-copy-row">
+                                <strong id="subscriptionSenderLabel">مدير العلامة التجارية</strong>
+                                <button type="button" class="copy-payment-btn sender-copy-btn" onclick="copySenderLabel(this)" aria-label="نسخ بيانات المرسل كاملة" title="نسخ بيانات المرسل كاملة"><i class="fas fa-copy"></i></button>
+                            </div>
+                        </div>
                         <div class="subscription-contact-options">
                             <a class="subscription-contact-option whatsapp-option" href="https://wa.me/213671466489" target="_blank" rel="noopener noreferrer" aria-label="واتساب 0671 466 489"><span>0671 466 489</span><span class="contact-large-icon"><i class="fab fa-whatsapp"></i></span></a>
                             <a class="subscription-contact-option telegram-option" href="https://t.me/+213551102155" target="_blank" rel="noopener noreferrer" aria-label="تيليغرام 0551 102 155"><span>0551 102 155</span><span class="contact-large-icon"><i class="fab fa-telegram-plane"></i></span></a>
@@ -10572,6 +10593,31 @@ window.copySubscriptionManagerDetails = async function(button){
     const ok=document.execCommand("copy");area.remove();
     if(typeof notify==="function")notify(ok?"تم النسخ بنجاح.":"تعذر النسخ تلقائيًا، يرجى نسخ النص يدويًا.",ok?"success":"warning");
   }
+};
+
+window.copySenderLabel = async function(button){
+  const label=(document.getElementById("subscriptionSenderLabel")?.textContent||"مدير العلامة التجارية").trim();
+  const brand=(document.getElementById("subscriptionBrandName")?.textContent||"").trim();
+  const manager=(document.getElementById("subscriptionManagerName")?.textContent||"").trim();
+  // انسخ بيانات المرسل كاملة: الصفة + العلامة التجارية + اسم مدير المتجر.
+  const value=[label,brand,manager].filter(Boolean).join(" — ");
+  const old=button?button.innerHTML:"";
+  let copied=false;
+  try{
+    if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(value);copied=true;}
+    else throw new Error("Clipboard API unavailable");
+  }catch(e){
+    const area=document.createElement("textarea");area.value=value;area.style.position="fixed";area.style.left="-9999px";area.style.opacity="0";
+    document.body.appendChild(area);area.focus();area.select();
+    try{copied=document.execCommand("copy");}catch(_){copied=false;}
+    area.remove();
+  }
+  if(button&&copied){
+    button.innerHTML='<i class="fas fa-check"></i>';button.classList.add("copied");
+    button.setAttribute("aria-label","تم نسخ بيانات المرسل كاملة");button.title="تم نسخ بيانات المرسل كاملة";
+    setTimeout(()=>{button.innerHTML=old;button.classList.remove("copied");button.setAttribute("aria-label","نسخ بيانات المرسل كاملة");button.title="نسخ بيانات المرسل كاملة";},1300);
+  }
+  if(typeof notify==="function")notify(copied?"تم نسخ بيانات المرسل كاملة: الصفة والعلامة التجارية واسم المدير.":"تعذر النسخ تلقائيًا، يرجى المحاولة مرة أخرى.",copied?"success":"warning");
 };
 
 window.copySubscriptionValue = async function(elementId, button){
