@@ -2633,18 +2633,28 @@
         @media (max-width:700px) { .about-support-numbers .about-contact-person { width:100%; } .subscription-contact-footer { padding:22px 14px; } .subscription-contact-option { width:100%; min-width:0; } }
         .about-subscription-contact { max-width: 900px; margin: 30px auto 20px; }
         
-/* وضوح النسخ ومعلومات المرسل في قسم الاشتراك */
+/* توحيد الخط والألوان داخل بطاقة التواصل مع الدعم ووضوح أزرار النسخ */
+.subscription-contact-footer,
+.subscription-contact-footer *{font-family:"Cairo",sans-serif}
+.subscription-contact-footer h3{font-size:21px;font-weight:900;line-height:1.6}
+.subscription-contact-footer>p{font-size:15px;font-weight:600;line-height:1.9;color:rgba(255,255,255,.86)}
 .payment-manager-row>span:first-child{color:#000!important;text-shadow:none!important}
-.copy-payment-btn{width:42px;height:42px;flex:0 0 42px;background:linear-gradient(135deg,#2455d6,#12379c);border:2px solid #fff;outline:1px solid rgba(36,85,214,.28);box-shadow:0 4px 12px rgba(20,55,156,.28);font-size:18px}
+.copy-payment-btn{width:42px;height:42px;flex:0 0 42px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#2455d6,#12379c);border:2px solid #fff;outline:1px solid rgba(36,85,214,.28);box-shadow:0 4px 12px rgba(20,55,156,.28);font-size:18px;transition:transform .2s,box-shadow .2s,background .2s}
+.copy-payment-btn i{pointer-events:none}
 .copy-payment-btn:hover{transform:translateY(-2px);box-shadow:0 7px 17px rgba(20,55,156,.36)}
+.copy-payment-btn:focus-visible{outline:3px solid #75a7ff;outline-offset:3px}
 .copy-payment-btn.copied{background:linear-gradient(135deg,#159957,#087443)!important;outline-color:#159957;animation:copySuccessPop .35s ease}
 @keyframes copySuccessPop{0%{transform:scale(.86)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
-.sender-copy-note{margin:14px 0 10px;padding:11px 14px;border-radius:10px;background:#fff8e7;border:1px solid #f3d28a;color:#493300;font-weight:800;text-align:right;direction:rtl;line-height:1.8}
-.sender-copy-block{margin:8px 0 16px;padding:12px 14px;border:1px solid #dce5f4;border-radius:12px;background:#fff;text-align:right}
-.sender-copy-caption{font-size:13px;color:#586174;font-weight:800;margin-bottom:7px}
-.sender-copy-row{display:flex;align-items:center;justify-content:flex-start;gap:12px}
-.sender-copy-row strong{font-size:17px;font-weight:900;color:#000!important;text-shadow:none!important}
-.sender-copy-btn{margin-inline-start:0}
+.sender-copy-note{margin:14px 0 10px;padding:11px 14px;border-radius:10px;background:#fff8e7;border:1px solid #f3d28a;color:#493300;font-size:15px;font-weight:800;text-align:right;direction:rtl;line-height:1.9}
+.sender-copy-block{margin:8px 0 16px;padding:12px 14px;border:1px solid rgba(255,255,255,.18);border-radius:12px;background:rgba(255,255,255,.08);text-align:right;color:#fff}
+.sender-copy-caption{font-size:14px;color:rgba(255,255,255,.8);font-weight:800;margin-bottom:7px}
+.sender-copy-row{display:flex;align-items:center;justify-content:space-between;gap:12px;direction:rtl}
+.sender-copy-row strong{font-size:17px;font-weight:900;color:#fff!important;text-shadow:none!important;line-height:1.8}
+.sender-copy-btn{margin-inline-start:auto;flex-shrink:0}
+/* زر نسخ اسم صاحب RIP على الطرف المقابل للاسم، وبنفس مواصفات أزرار النسخ الأخرى */
+.payment-rip-row .rip-account-holder{justify-content:space-between;gap:12px}
+.payment-rip-row .copy-account-name-btn{margin-left:auto;margin-right:0;width:42px;height:42px;flex:0 0 42px;font-size:18px}
+@media(max-width:480px){.payment-rip-row .copy-account-name-btn{width:32px;height:32px;flex-basis:32px}.sender-copy-row strong{font-size:15px}.sender-copy-note{font-size:13px}.subscription-contact-footer>p{font-size:14px}}
 </style>
 
 <style id="mobile-full-height-modals">
@@ -10599,15 +10609,14 @@ window.copySenderLabel = async function(button){
   const label=(document.getElementById("subscriptionSenderLabel")?.textContent||"مدير العلامة التجارية").trim();
   const brand=(document.getElementById("subscriptionBrandName")?.textContent||"").trim();
   const manager=(document.getElementById("subscriptionManagerName")?.textContent||"").trim();
-  // انسخ بيانات المرسل كاملة: الصفة + العلامة التجارية + اسم مدير المتجر.
   const value=[label,brand,manager].filter(Boolean).join(" — ");
-  const old=button?button.innerHTML:"";
+  const old=button?button.innerHTML:'<i class="fas fa-copy"></i>';
   let copied=false;
   try{
     if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(value);copied=true;}
     else throw new Error("Clipboard API unavailable");
   }catch(e){
-    const area=document.createElement("textarea");area.value=value;area.style.position="fixed";area.style.left="-9999px";area.style.opacity="0";
+    const area=document.createElement("textarea");area.value=value;area.style.position="fixed";area.style.left="-9999px";area.style.top="0";area.style.opacity="0";area.setAttribute("readonly","");
     document.body.appendChild(area);area.focus();area.select();
     try{copied=document.execCommand("copy");}catch(_){copied=false;}
     area.remove();
